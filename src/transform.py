@@ -256,7 +256,12 @@ def query_orders_per_day_and_holidays_2017(database: Engine) -> QueryResult:
     #   - 'date': la fecha correspondiente a cada cantidad de pedidos.
     #   - 'holiday': columna booleana con True si esa fecha es festivo,
     #                y False en caso contrario. Usa el DataFrame `holidays` para esto.
-    result_df = ...
+    result_df = pd.DataFrame({
+    "date": order_purchase_ammount_per_date.index,  
+    "order_count": order_purchase_ammount_per_date.values  
+    })
+
+    result_df["holiday"] = result_df["date"].isin(holidays["date"])
 
     # Mantén el código a continuación tal como está, esto devolverá el resultado de
     # la variable `aggregations` con el nombre y formato correspondiente.
