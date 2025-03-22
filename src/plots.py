@@ -181,6 +181,12 @@ def plot_freight_value_weight_relationship(df: DataFrame):
     """
     # TODO: Representar gráficamente la relación entre el valor del flete y el peso usando un scatterplot de seaborn.
     # El eje x debe ser el peso (weight) y el eje y debe ser el valor del flete (freight value).
+    sns.scatterplot(
+    x='product_weight_g',  
+    y='freight_value',     
+    data=delivered,        
+    alpha=0.5              
+    )
 
     raise NotImplementedError
 
@@ -205,5 +211,20 @@ def plot_order_amount_per_day_with_holidays(df: DataFrame):
     # TODO: Graficar el monto de pedidos por día con los días festivos usando matplotlib.
     # Marcar los días festivos con líneas verticales.
     # Sugerencia: usar plt.axvline.
+    plt.plot(
+    result_df["date"],         
+    result_df["order_count"],  
+    label="Pedidos por día",   
+    color="blue"               
+    )
 
+    for date in holidays_df["date"]:
+        plt.axvline(
+            x=date,                
+            color="red",           
+            linestyle="--",        
+            alpha=0.5,             
+            label="Día festivo"    
+    )
+    
     raise NotImplementedError
