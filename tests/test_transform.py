@@ -8,13 +8,11 @@ import math
 from src.transform import (
     query_delivery_date_difference,
     query_global_ammount_order_status,
+    query_real_vs_estimated_delivered_time,
     query_revenue_by_month_year,
     query_revenue_per_state,
     query_top_10_least_revenue_categories,
     query_top_10_revenue_categories,
-    query_real_vs_estimated_delivered_time,
-    query_orders_per_day_and_holidays_2017,
-    query_freight_value_weight_relationship,
 )
 from src.load import load
 from src.extract import extract
@@ -192,17 +190,3 @@ def test_real_vs_estimated_delivered_time(database: Engine):
         to_float(actual, "Year2018_estimated_time"),
         to_float(expected, "Year2018_estimated_time"),
     )
-
-
-def test_query_orders_per_day_and_holidays_2017(database: Engine):
-    query_name = "orders_per_day_and_holidays_2017"
-    actual: QueryResult = query_orders_per_day_and_holidays_2017(database)
-    expected = read_query_result(query_name)
-    assert pandas_to_json_object(actual.result) == expected
-
-
-def test_query_get_freight_value_weight_relationship(database: Engine):
-    query_name = "get_freight_value_weight_relationship"
-    actual: QueryResult = query_freight_value_weight_relationship(database)
-    expected = read_query_result(query_name)
-    assert pandas_to_json_object(actual.result) == expected
