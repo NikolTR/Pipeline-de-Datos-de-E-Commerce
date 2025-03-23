@@ -185,12 +185,10 @@ def plot_freight_value_weight_relationship(df: DataFrame):
     sns.scatterplot(
     x='product_weight_g',  
     y='freight_value',     
-    data=delivered,        
+    data=df,        
     alpha=0.5              
     )
-
-    raise NotImplementedError
-
+    
 
 def plot_delivery_date_difference(df: DataFrame):
     """Plot delivery date difference
@@ -202,8 +200,7 @@ def plot_delivery_date_difference(df: DataFrame):
         title="Difference Between Delivery Estimate Date and Delivery Date"
     )
 
-
-def plot_order_amount_per_day_with_holidays(orders_per_day_and_holidays):
+def plot_order_amount_per_day_with_holidays(df: DataFrame):
     """Plot order amount per day with holidays
 
     Args:
@@ -213,19 +210,19 @@ def plot_order_amount_per_day_with_holidays(orders_per_day_and_holidays):
     # Marcar los días festivos con líneas verticales.
     # Sugerencia: usar plt.axvline.
     plt.plot(
-    orders_per_day_and_holidays["date"],         
-    orders_per_day_and_holidays["order_count"],  
-    label="Pedidos por día",   
-    color="blue"               
+        df["date"],         
+        df["order_count"],  
+        label="Pedidos por día",   
+        color="green"
     )
 
-    for date in holidays_df["date"]:
-        plt.axvline(
-            x=date,                
-            color="red",           
-            linestyle="--",        
-            alpha=0.5,             
-            label="Día festivo"    
-    )
+    holiday_dates = df[df["holiday"]]["date"]
     
-    raise NotImplementedError
+    for date in holiday_dates:
+        plt.axvline(
+            x=date,
+            color="blue",
+            linestyle="--",
+            alpha=0.5,
+            label="Día festivo"
+        )
