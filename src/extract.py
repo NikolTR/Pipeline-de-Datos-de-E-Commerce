@@ -28,15 +28,26 @@ def get_public_holidays(public_holidays_url: str, year: str) -> DataFrame:
     # Debes lanzar SystemExit si la solicitud falla. Investiga el método raise_for_status
     # de la biblioteca requests.
 
-    response = requests.get(f"{public_holidays_url}/{year}/BR")
+    response = requests.get(f'{public_holidays_url}/{year}/BR')
     try:
+
         response.raise_for_status()
-        df = read_json(response.text)
+        # Convierte la respuesta a JSON directamente
+        data = response.json()
+        
+        # Carga los datos en un DataFrame
+        df = DataFrame(data)
+
+        # Elimina las columnas innecesarias
+        df = df.drop(columns=["types", "counties"], errors='ignore')
+
+        # Convierte la columna 'date' a formato datetime
         df["date"] = to_datetime(df["date"])
-        df = df.drop(columns=["types", "counties"])
+        print(df.info())
         return df
-    except requests.exceptions.HTTPError as err:
-        raise SystemExit(err)
+    except requests.RequestException as e:
+        print(f'Error al obtener los días festivos: {e}')
+        raise SystemExit("Error al obtener los días festivos desde la API.")
 
 
 def extract(

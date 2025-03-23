@@ -243,6 +243,7 @@ def query_orders_per_day_and_holidays_2017(database: Engine) -> QueryResult:
     # Usando el DataFrame `filtered_dates`, cuenta cuántos pedidos se hicieron
     # cada día.
     # Asigna el resultado a la variable `order_purchase_ammount_per_date`.
+
     order_purchase_ammount_per_date = (
         filtered_dates.groupby(filtered_dates["order_purchase_timestamp"].dt.date)
         .size()
@@ -257,6 +258,7 @@ def query_orders_per_day_and_holidays_2017(database: Engine) -> QueryResult:
     #   - 'date': la fecha correspondiente a cada cantidad de pedidos.
     #   - 'holiday': columna booleana con True si esa fecha es festivo,
     #                y False en caso contrario. Usa el DataFrame `holidays` para esto.
+    
     order_purchase_ammount_per_date["date"] = pd.to_datetime(
         order_purchase_ammount_per_date["order_purchase_timestamp"]
     )
