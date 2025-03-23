@@ -213,8 +213,8 @@ def plot_order_amount_per_day_with_holidays(orders_per_day_and_holidays):
     # Marcar los días festivos con líneas verticales.
     # Sugerencia: usar plt.axvline.
     plt.plot(
-    result["date"],         
-    result["order_count"],  
+    orders_per_day_and_holidays["date"],         
+    orders_per_day_and_holidays["order_count"],  
     label="Pedidos por día",   
     color="blue"               
     )
