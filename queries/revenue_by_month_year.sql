@@ -5,38 +5,23 @@
 -- Year2017, con los ingresos por mes de 2017 (0.00 si no existe); y
 -- Year2018, con los ingresos por mes de 2018 (0.00 si no existe).
 
-WITH Months AS (
-    SELECT '01' AS month_no, 'Jan' AS month UNION ALL
-    SELECT '02', 'Feb' UNION ALL
-    SELECT '03', 'Mar' UNION ALL
-    SELECT '04', 'Apr' UNION ALL
-    SELECT '05', 'May' UNION ALL
-    SELECT '06', 'Jun' UNION ALL
-    SELECT '07', 'Jul' UNION ALL
-    SELECT '08', 'Aug' UNION ALL
-    SELECT '09', 'Sep' UNION ALL
-    SELECT '10', 'Oct' UNION ALL
-    SELECT '11', 'Nov' UNION ALL
-    SELECT '12', 'Dec'
-),
-MonthlyRevenue AS (
-    SELECT
-        strftime('%m', olist_orders.order_purchase_timestamp) AS month_no,
+WITH payments AS (
+    SELECT 
+        olist_orders.order_id,
         strftime('%Y', olist_orders.order_purchase_timestamp) AS year,
-        SUM(olist_order_payments.payment_value) AS revenue
-    FROM olist_orders
-    JOIN olist_order_payments ON olist_orders.order_id = olist_order_payments.order_id
-    WHERE olist_orders.order_status = 'delivered'
-    AND olist_orders.order_purchase_timestamp BETWEEN '2016-01-01' AND '2018-12-31'
-    GROUP BY month_no, year
+        CAST(strftime('%m', olist_orders.order_purchase_timestamp) AS INTEGER) AS month,
+        olist_order_payments.payment_value
+    FROM olist_orders 
+    JOIN olist_order_payments  
+        ON olist_orders.order_id = olist_order_payments.order_id
+    WHERE olist_orders.order_status = 'delivered' 
 )
-SELECT
-    Months.month_no,
-    Months.month,
-    COALESCE(SUM(CASE WHEN MonthlyRevenue.year = '2016' THEN MonthlyRevenue.revenue ELSE 0 END), 0) AS Year2016,
-    COALESCE(SUM(CASE WHEN MonthlyRevenue.year = '2017' THEN MonthlyRevenue.revenue ELSE 0 END), 0) AS Year2017,
-    COALESCE(SUM(CASE WHEN MonthlyRevenue.year = '2018' THEN MonthlyRevenue.revenue ELSE 0 END), 0) AS Year2018
-FROM Months
-LEFT JOIN MonthlyRevenue ON Months.month_no = MonthlyRevenue.month_no
-GROUP BY Months.month_no, Months.month
-ORDER BY Months.month_no;
+SELECT 
+    printf('%02d', month) AS month_no, 
+    substr('JanFebMarAprMayJunJulAugSepOctNovDec', month * 3 - 2, 3) AS month,
+    COALESCE(SUM(CASE WHEN year = '2016' THEN payment_value END), 0.0) AS Year2016,
+    COALESCE(SUM(CASE WHEN year = '2017' THEN payment_value END), 0.0) AS Year2017,
+    COALESCE(SUM(CASE WHEN year = '2018' THEN payment_value END), 0.0) AS Year2018
+FROM payments
+GROUP BY month
+ORDER BY month_no;
