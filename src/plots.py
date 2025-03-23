@@ -1,3 +1,4 @@
+from unittest import result
 import matplotlib
 import matplotlib.pyplot as plt
 
@@ -202,7 +203,7 @@ def plot_delivery_date_difference(df: DataFrame):
     )
 
 
-def plot_order_amount_per_day_with_holidays(df: DataFrame):
+def plot_order_amount_per_day_with_holidays(orders_per_day_and_holidays):
     """Plot order amount per day with holidays
 
     Args:
@@ -212,8 +213,8 @@ def plot_order_amount_per_day_with_holidays(df: DataFrame):
     # Marcar los días festivos con líneas verticales.
     # Sugerencia: usar plt.axvline.
     plt.plot(
-    result_df["date"],         
-    result_df["order_count"],  
+    result["date"],         
+    result["order_count"],  
     label="Pedidos por día",   
     color="blue"               
     )
