@@ -43,7 +43,7 @@ def get_public_holidays(public_holidays_url: str, year: str) -> DataFrame:
 
         # Convierte la columna 'date' a formato datetime
         df["date"] = to_datetime(df["date"])
-        print(df.info())
+        print(f"{df.info()}\nLa información fue extraída exitosamente.")
         return df
     except requests.RequestException as e:
         print(f'Error al obtener los días festivos: {e}')
